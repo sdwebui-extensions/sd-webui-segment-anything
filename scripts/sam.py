@@ -20,13 +20,32 @@ from sam_hq.build_sam_hq import sam_model_registry
 from scripts.dino import dino_model_list, dino_predict_internal, show_boxes, clear_dino_cache, dino_install_issue_text
 from scripts.auto import clear_sem_sam_cache, register_auto_sam, semantic_segmentation, sem_sam_garbage_collect, image_layer_internal, categorical_mask_image
 from scripts.process_params import SAMProcessUnit, max_cn_num
+from modules.shared import encode_image_to_base64
+import requests
+import json
+from modules.api.api import decode_base64_to_image
+
+def decode_to_pil(image):
+    if os.path.exists(image):
+        return Image.open(image)
+    elif type(image) is str:
+        return decode_base64_to_image(image)
+    elif type(image) is Image.Image:
+        return image
+    elif type(image) is np.ndarray:
+        return Image.fromarray(image)
+    else:
+        Exception("Not an image")
 
 
 refresh_symbol = '\U0001f504'       # 🔄
 sam_model_cache = OrderedDict()
 scripts_sam_model_dir = os.path.join(scripts.basedir(), "models/sam") 
 sd_sam_model_dir = os.path.join(models_path, "sam")
-sam_model_dir = sd_sam_model_dir if os.path.exists(sd_sam_model_dir) else scripts_sam_model_dir 
+if len(os.listdir(scripts_sam_model_dir))>1:
+    sam_model_dir = sd_sam_model_dir if os.path.exists(sd_sam_model_dir) else scripts_sam_model_dir 
+else:
+    sam_model_dir = sd_sam_model_dir
 sam_model_list = [f for f in os.listdir(sam_model_dir) if os.path.isfile(os.path.join(sam_model_dir, f)) and f.split('.')[-1] != 'txt']
 sam_device = device
 
@@ -187,6 +206,33 @@ def sam_predict(sam_model_name, input_image, positive_points, negative_points,
                 dino_checkbox, dino_model_name, text_prompt, box_threshold,
                 dino_preview_checkbox, dino_preview_boxes_selection):
     print("Start SAM Processing")
+    if shared.cmd_opts.just_ui:
+        req = {}
+        req['input_image'] = encode_image_to_base64(input_image)
+        req['sam_model_name'] = sam_model_name
+        req['sam_positive_points'] = positive_points
+        req['sam_negative_points'] = negative_points
+        req['dino_enabled'] = dino_checkbox and text_prompt is not None
+        req['dino_model_name'] = dino_model_name
+        req['dino_text_prompt'] = text_prompt
+        req['dino_box_threshold'] = box_threshold
+        req['dino_preview_checkbox'] = dino_preview_checkbox
+        req['dino_preview_boxes_selection'] = dino_preview_boxes_selection
+        result = requests.post(f'{shared.cmd_opts.server_path}/sam/sam-predict', json=req)
+        if result.status_code==200:
+            result = json.loads(result.text)
+            sam_output_mask_gallery = []
+            sam_message = result['msg']
+            for key in ['blended_images', 'masks', 'masked_images']:
+                for mask_b64 in result[key]:
+                    mask = np.array(decode_to_pil(mask_b64)).astype(np.uint8)
+                    if key=='masks':
+                        mask[mask>0] = 255
+                    sam_output_mask_gallery.append(mask)
+            return sam_output_mask_gallery, sam_message
+        raise Exception(f'failed to run sam with status_code {result.status_code} and {result.text}')
+
+
     if sam_model_name is None:
         return [], "SAM model not found. Please download SAM model from extension README."
     if input_image is None:

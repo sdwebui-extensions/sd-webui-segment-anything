@@ -8,8 +8,10 @@ from collections import OrderedDict
 from modules import scripts, shared
 from modules.devices import device, torch_gc, cpu
 import local_groundingdino
+from modules.paths import models_path
 
-
+saved_dino_model_dir = os.path.join(models_path, 'models/grounding-dino')
+os.makedirs(saved_dino_model_dir, exist_ok=True)
 dino_model_cache = OrderedDict()
 sam_extension_dir = scripts.basedir()
 dino_model_dir = os.path.join(sam_extension_dir, "models/grounding-dino")
@@ -118,7 +120,7 @@ def load_dino_model(dino_checkpoint, dino_install_success):
         args = SLConfig.fromfile(dino_model_info[dino_checkpoint]["config"])
         dino = build_model(args)
         checkpoint = torch.hub.load_state_dict_from_url(
-            dino_model_info[dino_checkpoint]["url"], dino_model_dir)
+            dino_model_info[dino_checkpoint]["url"], saved_dino_model_dir)
         dino.load_state_dict(clean_state_dict(
             checkpoint['model']), strict=False)
         dino.to(device=device)

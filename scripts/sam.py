@@ -45,6 +45,7 @@ sd_sam_model_dir = os.path.join(models_path, "sam")
 if len(os.listdir(scripts_sam_model_dir))>1:
     sam_model_dir = sd_sam_model_dir if os.path.exists(sd_sam_model_dir) else scripts_sam_model_dir 
 else:
+    os.makedirs(sd_sam_model_dir, exist_ok=True)
     sam_model_dir = sd_sam_model_dir
 sam_model_list = [f for f in os.listdir(sam_model_dir) if os.path.isfile(os.path.join(sam_model_dir, f)) and f.split('.')[-1] != 'txt']
 sam_device = device

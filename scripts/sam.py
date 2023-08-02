@@ -25,6 +25,34 @@ import requests
 import json
 from modules.api.api import decode_base64_to_image
 
+import shutil
+try:
+    from modules.paths_internal import shared_models_path
+except:
+    shared_models_path = None
+from logger import logger
+
+sam_save_dir = os.path.join(models_path, 'sam')
+dino_save_dir = os.path.join(models_path, 'grounding-dino')
+os.makedirs(sam_save_dir, exist_ok=True)
+os.makedirs(dino_save_dir, exist_ok=True)
+shared_sam_models = os.path.join(shared_models_path, 'sam') if shared_models_path else None
+shared_dino_models = os.path.join(shared_models_path, 'grounding-dino') if shared_models_path else None
+if shared_sam_models and os.path.exists(shared_sam_models) and os.path.isdir(shared_sam_models):
+    for pth_file in os.listdir(shared_sam_models):
+        if pth_file.endswith('.pth'):
+            pth_path = os.path.join(shared_sam_models, pth_file)
+            if not os.path.exists(os.path.join(sam_save_dir, pth_path)):
+                shutil.copyfile(pth_path, os.path.join(sam_save_dir, pth_path))
+                logger.info(f'copy file from {pth_path} to {sam_save_dir}')
+if shared_dino_models and os.path.exists(shared_dino_models) and os.path.isdir(shared_dino_models):
+    for pth_file in os.listdir(shared_dino_models):
+        if pth_file.endswith('.pth'):
+            pth_path = os.path.join(shared_dino_models, pth_file)
+            if not os.path.exists(os.path.join(dino_save_dir, pth_path)):
+                shutil.copyfile(pth_path, os.path.join(dino_save_dir, pth_path))
+                logger.info(f'copy file from {pth_path} to {dino_save_dir}')
+
 def decode_to_pil(image):
     if os.path.exists(image):
         return Image.open(image)

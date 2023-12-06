@@ -21,6 +21,7 @@ This extension aim for connecting [AUTOMATIC1111 Stable Diffusion WebUI](https:/
 - `2023/06/04`: [v1.5.1](https://github.com/continue-revolution/sd-webui-segment-anything/releases/tag/v1.5.1) `Upload Mask to ControlNet Inpainting` comes back in response to [ControlNet inpaint improvement](https://github.com/Mikubill/sd-webui-controlnet/discussions/1464). You should see a new tab beside `AutoSAM` after updating the extension. This feature will again be removed once ControlNet extension has its own uploading feature.
 - `2023/06/13`: [v1.6.0](https://github.com/continue-revolution/sd-webui-segment-anything/releases/tag/v1.6.0) [SAM-HQ](https://github.com/SysCV/sam-hq) supported by [@SpenserCai](https://github.com/SpenserCai) and me. This is an "upgraded" SAM, created by researchers at ETH Zurich & HKUST. However, I cannot guarantee which one is better and you should make your own choice based on your own experiments. Go to [Installation](#installation) to get the link to the models.
 - `2023/06/29`: [v1.6.1](https://github.com/continue-revolution/sd-webui-segment-anything/releases/tag/v1.6.1) [MobileSAM](https://github.com/ChaoningZhang/MobileSAM) supported. This is a tiny version of SAM, created by researchers at Kyung Hee University. Visit [here](https://github.com/continue-revolution/sd-webui-segment-anything/issues/139) for more information.
+- `2023/08/31`: [v1.6.2](https://github.com/continue-revolution/sd-webui-segment-anything/releases/tag/v1.6.2) Support WebUI [v1.6.0](https://github.com/AUTOMATIC1111/stable-diffusion-webui/releases/tag/v1.6.0), Gradio v3.41.2
 
 Note that support for some other variations of SAM, such as [Matting-Anything](https://github.com/SHI-Labs/Matting-Anything) and [FastSAM](https://github.com/CASIA-IVA-Lab/FastSAM) are still on the way. Support for these models, unlike MobileSAM, are non-trivial, especially FastSAM, which utilize a completely different pipeline, ultralytics/YOLO. Introducing these new works to the current codebase will make the original ugly-enough codebase more ugly. They will be supported once I finish a major refactor of the current codebase.
 
@@ -128,7 +129,7 @@ However, there are some existing problems with AutoSAM:
 
 ## How to Use
 
-If you have previously enabled other copys while using this extension, you may want to click `Uncheck all copies` at the bottom of this extension UI, to prevent other copies from affecting your current page.
+If you have previously enabled other copies while using this extension, you may want to click `Uncheck all copies` at the bottom of this extension UI, to prevent other copies from affecting your current page.
 
 ### Single Image
 1. Upload your image
@@ -235,14 +236,19 @@ I welcome any contribution. Please submit a pull request if you want to contribu
 
 ## Star History
 
-Give me a star if you like this extension!
+<a href="https://star-history.com/#continue-revolution/sd-webui-segment-anything&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=continue-revolution/sd-webui-segment-anything&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=continue-revolution/sd-webui-segment-anything&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=continue-revolution/sd-webui-segment-anything&type=Date" />
+  </picture>
+</a>
 
-[![Star History Chart](https://api.star-history.com/svg?repos=continue-revolution/sd-webui-segment-anything&type=Date)](https://star-history.com/#continue-revolution/sd-webui-segment-anything&Date)
 
 ## Sponsor
 
-You can sponsor me via WeChat or Alipay.
+You can sponsor me via WeChat, AliPay or PayPal.
 
-| WeChat | Alipay |
-| --- | --- |
-| ![216aff0250c7fd2bb32eeb4f7aae623](https://user-images.githubusercontent.com/63914308/232824466-21051be9-76ce-4862-bb0d-a431c186fce1.jpg) | ![15fe95b4ada738acf3e44c1d45a1805](https://user-images.githubusercontent.com/63914308/232824545-fb108600-729d-4204-8bec-4fd5cc8a14ec.jpg) |
+| WeChat | AliPay | PayPal |
+| --- | --- | --- |
+| ![216aff0250c7fd2bb32eeb4f7aae623](https://user-images.githubusercontent.com/63914308/232824466-21051be9-76ce-4862-bb0d-a431c186fce1.jpg) | ![15fe95b4ada738acf3e44c1d45a1805](https://user-images.githubusercontent.com/63914308/232824545-fb108600-729d-4204-8bec-4fd5cc8a14ec.jpg) | ![IMG_1419_](https://github.com/continue-revolution/sd-webui-segment-anything/assets/63914308/0261a575-a43e-4dd1-98a6-0cfe8a3af78e) |

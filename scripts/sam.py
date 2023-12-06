@@ -70,6 +70,8 @@ refresh_symbol = '\U0001f504'       # 🔄
 sam_model_cache = OrderedDict()
 scripts_sam_model_dir = os.path.join(scripts.basedir(), "models/sam") 
 sd_sam_model_dir = os.path.join(models_path, "sam")
+if shared.cmd_opts.just_ui:
+    sd_sam_model_dir = os.path.join(os.path.dirname(shared.cmd_opts.data_dir), 'models/sam')
 if len(os.listdir(scripts_sam_model_dir))>1:
     sam_model_dir = sd_sam_model_dir if os.path.exists(sd_sam_model_dir) else scripts_sam_model_dir 
 else:
